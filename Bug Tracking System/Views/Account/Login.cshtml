@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "Login";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+
+            <div class="card shadow">
+                <div class="card-header text-center">
+                    <h3>Login</h3>
+                </div>
+
+                <div class="card-body">
+
+                    @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="mb-3">
+                            @Html.Label("Email", new { @class = "form-label" })
+                            @Html.TextBox("Email", null, new { @class = "form-control", placeholder = "abc@xyz.com" })
+                        </div>
+
+                        <div class="mb-3">
+                            @Html.Label("Password", new { @class = "form-label" })
+                            @Html.Password("Password", null, new { @class = "form-control" })
+                        </div>
+                        <div class="mb-3 text-end">
+                            @Html.ActionLink("Forgot Password?", "ForgotPassword", "Account", null, new { @class = "text-decoration-none" })
+                        </div>
+                        <div class="d-grid">
+                            <input type="submit" value="Login" class="btn btn-primary" />
+                        </div>
+                    }
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
