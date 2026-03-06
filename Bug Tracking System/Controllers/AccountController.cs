@@ -18,10 +18,11 @@ namespace Bug_Tracking_System.Controllers
         public AccountController()
         {
             var repo = new UserRepository();
+            var otpRepo = new OtpRepository();
             var passwordService = new PasswordService();
             var emailService = new EmailService();
-            var tokenService = new TokenService();
-            _authService = new AuthService(repo,emailService, passwordService, tokenService);
+            var otpService = new OtpService();
+            _authService = new AuthService(repo,emailService, passwordService, otpService,otpRepo);
         }
         // GET: Account
         public ActionResult Login()

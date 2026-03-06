@@ -1,3 +1,4 @@
+using DotNetEnv;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Bug_Tracking_System
     {
         protected void Application_Start()
         {
+            Env.Load();
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
         }
