@@ -25,21 +25,6 @@ namespace Bug_Tracking_System.Controllers
             _authService = new AuthService(repo,emailService, passwordService, otpService,otpRepo);
         }
         // GET: Account
-        public ActionResult Login()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult Login(LoginVM user)
-        {
-            if (!ModelState.IsValid)
-            {
-                ModelState.AddModelError(null, "Enter Valid Details");
-                return View();
-            }
-            return RedirectToAction("Dashboard", "Home");
-        }
 
         public ActionResult Signup()
         {
@@ -47,15 +32,38 @@ namespace Bug_Tracking_System.Controllers
         }
 
         [HttpPost]
+        //[ValidateAntiForgeryToken]
         public JsonResult Signup(RegisterVM model)
         {
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError(null, "Enter Valid Details");
-                return Json(new {success = false,message = "Something Went Wrong"});
+                return Json(new {success = false,message = "Enter Valid Details"});
             }
-            _authService.Register(model);
-            return Json(new { success = true });
+            var user = _authService.Register(model);
+            Session["PendingUserId"] = user.Id;
+            return Json(new { success = true,message = "OTP sent successfully!!" });
+        }
+
+        public ActionResult VerifyOtp()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult VerifyOtp(string otp)
+        {
+            int userId = (int)Session["PendingUserId"];
+
+            bool isValid = _authService.VerifyOtp(userId, otp);
+
+            if (!isValid)
+            {
+                return Json(new { success = false, message = "Invalid OTP" });
+            }
+
+            Session.Remove("PendingUserId");
+
+            return Json(new { success = true, message = "Account verified successfully" });
         }
     }
 }

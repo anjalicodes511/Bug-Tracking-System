@@ -1,0 +1,31 @@
+﻿.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+.card-header {
+    background: linear-gradient(135deg, #4a90e2, #6fb1fc);
+    color: white;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.card-body {
+    background: linear-gradient(180deg, #ffffff, #f8f9fc);
+    padding: 28px;
+}
+
+.form-control {
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.btn-signup, .btn-login {
+    background: linear-gradient(135deg, #4a90e2, #6fb1fc);
+    color: white;
+    border-radius: 8px;
+    padding: 10px;
+    font-weight: 500;
+}

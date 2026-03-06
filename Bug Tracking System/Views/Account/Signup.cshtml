@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Signup";
 }
 
@@ -7,36 +6,39 @@
     <div class="row justify-content-center">
         <div class="col-md-4">
 
-            <div class="card shadow">
+            <div class="card shadow border-0">
                 <div class="card-header text-center">
-                    <h3>Login</h3>
+                    <h3>Create Account</h3>
                 </div>
 
                 <div class="card-body">
 
-                    @using (Html.BeginForm("Signup", "Account", FormMethod.Post))
+                    @using (Html.BeginForm("Signup", "Account", FormMethod.Post, new { id = "signupForm" }))
                     {
-                        @Html.AntiForgeryToken()
+                        @*@Html.AntiForgeryToken()*@
 
                         <div class="mb-3">
-                            @Html.Label("Name", new { @class = "form-label" })
-                            @Html.TextBox("Name", null, new { @class = "form-control", placeholder = "abc@xyz.com" })
-                        </div>
-
-                        <div class="mb-3">
-                            @Html.Label("Email", new { @class = "form-label" })
-                            @Html.TextBox("Email", null, new { @class = "form-control", placeholder = "abc@xyz.com" })
+                            @Html.Label("Name", new { @class = "form-label", @for = "nameId" })
+                            @Html.TextBox("Name", null, new { @class = "form-control", placeholder = "Enter your name", id = "nameId", autocomplete = "name" })
                         </div>
 
                         <div class="mb-3">
-                            @Html.Label("Password", new { @class = "form-label" })
-                            @Html.Password("Password", null, new { @class = "form-control" })
+                            @Html.Label("Email", new { @class = "form-label", @for = "emailId" })
+                            @Html.TextBox("Email", null, new { @class = "form-control", placeholder = "Enter your email", id = "emailId", autocomplete = "email" })
                         </div>
-                        <div class="mb-3 text-end">
-                            @Html.ActionLink("Forgot Password?", "ForgotPassword", "Account", null, new { @class = "text-decoration-none" })
+
+                        <div class="mb-3">
+                            @Html.Label("Password", new { @class = "form-label", @for = "passwordId" })
+                            @Html.Password("Password", null, new { @class = "form-control", placeholder = "Enter password", id = "passwordId", autocomplete = "new-password" })
                         </div>
+
                         <div class="d-grid">
-                            <input type="submit" value="SignUp" class="btn btn-primary" />
+                            <input type="submit" value="Sign Up" class="btn btn-signup" />
+                        </div>
+
+                        <div class="text-center mt-3">
+                            Already have an account?
+                            @Html.ActionLink("Login", "Login", "Account", null, new { @class = "text-decoration-none" })
                         </div>
                     }
 
@@ -46,3 +48,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script src="~/Scripts/Account/signup.js"></script>
+}

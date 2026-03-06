@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Helpers;
 
 namespace Bug_Tracking_System.Repositories
 {
@@ -16,7 +17,11 @@ namespace Bug_Tracking_System.Repositories
             {
                 throw new ArgumentNullException("user"); 
             }
-            DynamicParameters dp = new DynamicParameters(user);
+            DynamicParameters dp = new DynamicParameters();
+            dp.Add("@Name", user.Name);
+            dp.Add("@Email", user.Email);
+            dp.Add("@PasswordHash", user.PasswordHash);
+            dp.Add("@IsEmailVerified", user.IsEmailVerified);
             DapperORM.ExecuteWithoutReturn("CreateUser", dp);
         }
         public User GetByEmail(string email)
@@ -26,6 +31,22 @@ namespace Bug_Tracking_System.Repositories
 
             var user = DapperORM.ReturnSingle<User>("GetUserByEmail", dp);
             return user;
+        }
+
+        public User GetById(int UserId)
+        {
+            DynamicParameters dp = new DynamicParameters();
+            dp.Add("@UserId", UserId);
+
+            var user = DapperORM.ReturnSingle<User>("GetUserByEmail", dp);
+            return user;
+        }
+
+        public void Update(User record)
+        {
+            DynamicParameters dp = new DynamicParameters(record);
+
+            DapperORM.ExecuteWithoutReturn("UpdateUser", dp);
         }
     }
 }
