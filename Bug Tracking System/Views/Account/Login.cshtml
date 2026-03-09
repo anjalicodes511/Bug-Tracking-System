@@ -13,18 +13,18 @@
 
                 <div class="card-body">
 
-                    @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+                    @using (Html.BeginForm("Login", "Account", FormMethod.Post,new {id = "loginForm" }))
                     {
                         @Html.AntiForgeryToken()
-
+                        <div id="errorMsg" class="text-center bg-danger text-primary"></div>
                         <div class="mb-3">
                             @Html.Label("Email", new { @class = "form-label" })
-                            @Html.TextBox("Email", null, new { @class = "form-control", placeholder = "abc@xyz.com" })
+                            @Html.TextBox("Email", null, new { @class = "form-control", placeholder = "abc@xyz.com", id = "emailId" })
                         </div>
 
                         <div class="mb-3">
                             @Html.Label("Password", new { @class = "form-label" })
-                            @Html.Password("Password", null, new { @class = "form-control" })
+                            @Html.Password("Password", null, new { @class = "form-control", id = "passwordId" })
                         </div>
                         <div class="mb-3 text-end">
                             @Html.ActionLink("Forgot Password?", "ForgotPassword", "Account", null, new { @class = "text-decoration-none" })

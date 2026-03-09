@@ -43,15 +43,29 @@
                     </div>
 
                     <div class="text-center mt-4 small">
+
                         <span class="text-muted">Didn't receive OTP?</span>
                         <br />
 
+                        <!-- Timer text -->
+                        <span id="resendTimer" class="text-muted">
+                            Resend OTP in <span id="timer">60</span> seconds
+                        </span>
+
+                        <br />
+
+                        <!-- Resend link -->
                         @Html.ActionLink(
                             "Resend OTP",
                             "ResendOtp",
                             "Account",
                             null,
-                            new { @class = "text-decoration-none fw-semibold" }
+                            new
+                                 {
+                                @class = "text-decoration-none fw-semibold",
+                                id = "resendBtn",
+                                style = "display:none;"
+                            }
                         )
                     </div>
                 }

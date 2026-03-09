@@ -1,7 +1,5 @@
-$(function () {
-
-    $("#signupForm").on("submit", function (e) {
-
+$(document).ready(function () {
+    $("#loginForm").on("submit", function (e) {
         e.preventDefault();
 
         var form = $(this);
@@ -9,38 +7,31 @@ $(function () {
         btn.prop("disabled", true);
 
         var user = {
-            Name: $("#nameId").val(),
             Email: $("#emailId").val(),
-            Password: $("#passwordId").val()
-        };
+            Password:$("#passwordId").val()
+        }
 
-        if (!user.Name || !user.Email || !user.Password) {
-            alert("All fields are required");
-            btn.prop("disabled", false);
+        if (!user.Email || !user.Password) {
+            $("errorMessage").text("Please Enter All Fields");
             return;
         }
+
         $.ajax({
-            url: "/Account/Signup",
+            url: "/Account/Login",
             type: "POST",
             contentType: "application/json",
-            dataType: "json",
             data: JSON.stringify(user),
-
             success: function (res) {
                 if (res.success) {
                     showSuccess(res.message);
-                    //alert(res.message);
                     setTimeout(function () {
                         window.location.href = res.redirectUrl;
                     }, 1500);
                 }
                 else {
-                    showError(res.message || "Signup failed");
-                    //alert(res.message || "Signup failed");
+                    showError(res.message || "Something Went Wrong");
                 }
-
             },
-
             error: function (xhr) {
                 //console.error(xhr.responseText);
                 //alert("Unexpected error occurred");
@@ -50,9 +41,6 @@ $(function () {
             complete: function () {
                 btn.prop("disabled", false);
             }
-
         });
-
     });
-
 });

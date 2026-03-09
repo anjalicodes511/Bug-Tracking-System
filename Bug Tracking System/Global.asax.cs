@@ -1,3 +1,4 @@
+using Bug_Tracking_System.App_Start;
 using DotNetEnv;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace Bug_Tracking_System
         {
             Env.Load();
             AreaRegistration.RegisterAllAreas();
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
         }
     }

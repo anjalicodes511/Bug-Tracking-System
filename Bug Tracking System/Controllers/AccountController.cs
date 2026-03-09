@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Bug_Tracking_System.Models.VM;
+using Bug_Tracking_System.Repositories;
+using Bug_Tracking_System.Services;
+using Microsoft.AspNet.Identity;
+using Sprache;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Services.Description;
-using Bug_Tracking_System.Models.VM;
-using Bug_Tracking_System.Repositories;
-using Bug_Tracking_System.Services;
-using Microsoft.AspNet.Identity;
 
 namespace Bug_Tracking_System.Controllers
 {
@@ -35,13 +36,10 @@ namespace Bug_Tracking_System.Controllers
         //[ValidateAntiForgeryToken]
         public JsonResult Signup(RegisterVM model)
         {
-            if (!ModelState.IsValid)
-            {
-                return Json(new {success = false,message = "Enter Valid Details"});
-            }
             var user = _authService.Register(model);
             Session["PendingUserId"] = user.Id;
-            return Json(new { success = true,message = "OTP sent successfully!!" });
+            //return Success("OTP sent successfully!!");
+            return Json(new { success = true, message = "OTP Sent Successfully", redirectUrl = "/Account/VerifyOtp" });
         }
 
         public ActionResult VerifyOtp()
@@ -52,18 +50,50 @@ namespace Bug_Tracking_System.Controllers
         [HttpPost]
         public JsonResult VerifyOtp(string otp)
         {
-            int userId = (int)Session["PendingUserId"];
-
-            bool isValid = _authService.VerifyOtp(userId, otp);
-
-            if (!isValid)
+            if (Session["PendingUserId"] == null)
             {
-                return Json(new { success = false, message = "Invalid OTP" });
+                Response.StatusCode = 400;
+                return Json(new { success = false, message = "Session expired. Please signup again." });
             }
 
-            Session.Remove("PendingUserId");
+            int userId = (int)Session["PendingUserId"];
 
-            return Json(new { success = true, message = "Account verified successfully" });
+            _authService.VerifyOtp(userId, otp);
+
+            Session.Remove("PendingUserId");
+            return Json(new { success = true, message = "Account verified successfully", redirectUrl = "/Account/Login" });
         }
+
+        [HttpPost]
+        public JsonResult ResendOtp()
+        {
+            if (Session["PendingUserId"] == null)
+            {
+                Response.StatusCode = 400;
+                return Json(new { success = false, message = "Session expired. Signup again." });
+            }
+            int userId = (int)Session["PendingUserId"];
+            _authService.ResendOtp(userId);
+            return Json(new { success = true, message = "OTP resent successfully!", redirectUrl = "/Account/VerifyOtp" });
+        }
+
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult Login(LoginVM model)
+        {
+            _authService.Login(model);
+            return Json(new { success = true, message = "Login Successful", redirectUrl = "/Account/Home" });
+        }
+
+        //[Authorize]
+        public ActionResult Home()
+        {
+            return View();
+        }
+        
     }
 }

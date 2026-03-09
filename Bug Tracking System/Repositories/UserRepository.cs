@@ -36,9 +36,9 @@ namespace Bug_Tracking_System.Repositories
         public User GetById(int UserId)
         {
             DynamicParameters dp = new DynamicParameters();
-            dp.Add("@UserId", UserId);
+            dp.Add("@Id", UserId);
 
-            var user = DapperORM.ReturnSingle<User>("GetUserByEmail", dp);
+            var user = DapperORM.ReturnSingle<User>("GetUserById", dp);
             return user;
         }
 

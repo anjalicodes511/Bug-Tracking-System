@@ -36,7 +36,7 @@ namespace Bug_Tracking_System.Repositories
         {
             DynamicParameters dp = new DynamicParameters(record);
             
-            DapperORM.ExecuteWithoutReturn("UpdateEmailOTp", dp);
+            DapperORM.ExecuteWithoutReturn("UpdateEmailOtp", dp);
         }
     }
 }
