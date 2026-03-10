@@ -94,6 +94,11 @@ namespace Bug_Tracking_System.Controllers
         {
             return View();
         }
+
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
         
     }
 }

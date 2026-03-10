@@ -337,6 +337,7 @@
     <Content Include="Scripts\jquery-3.7.1.min.map" />
     <Content Include="Views\Account\VerifyOtp.cshtml" />
     <Content Include="Views\Account\Home.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
