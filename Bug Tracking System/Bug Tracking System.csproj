@@ -263,6 +263,7 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\CSS\Auth.css" />
+    <Content Include="Content\CSS\forgetPassword.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\Account\login.js" />
