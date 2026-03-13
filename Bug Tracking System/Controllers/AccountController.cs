@@ -100,5 +100,10 @@ namespace Bug_Tracking_System.Controllers
             return View();
         }
         
+        public JsonResult ForgotPassword(string email)
+        {
+            _authService.ForgotPassword(email);
+            return Json(new { success = true, message = "OTP sent to Email" });
+        }
     }
 }

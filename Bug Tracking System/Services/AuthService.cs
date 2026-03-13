@@ -203,7 +203,6 @@ namespace Bug_Tracking_System.Services
                                 <p>Hello,</p>
 
                                 <p>{message}</p>
-
                                 <div style='text-align:center; margin:20px 0;'>
                                     <span style='font-size:28px; font-weight:bold; letter-spacing:4px; color:#007bff;'>
                                         {otp}
@@ -245,8 +244,90 @@ namespace Bug_Tracking_System.Services
             }
             FormsAuthentication.SetAuthCookie(user.Email, false);
         }
-    
-    
-    
+
+        public void ForgotPassword(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                throw new BusinessException("Email is required.");
+            }
+
+            var user = _userRepository.GetByEmail(email);
+
+            if (user == null)
+            {
+                throw new BusinessException("Invalid Email.");
+            }
+
+            if (user.IsBlocked && user.BlockedUntil > DateTime.Now)
+            {
+                throw new BusinessException("Account is temporarily blocked. Try again later.");
+            }
+
+            var oldOtp = _otpRepository.GetLatestOtp(user.Id);
+
+            if (oldOtp != null)
+            {
+                if (oldOtp.CreatedAt.AddSeconds(60) > DateTime.Now)
+                {
+                    throw new BusinessException("Please wait before requesting another OTP.");
+                }
+
+                oldOtp.IsUsed = true;
+                _otpRepository.Update(oldOtp);
+            }
+
+            var otp = _otpService.GenerateOTP();
+
+            EmailOtp emailOtp = new EmailOtp
+            {
+                UserId = user.Id,
+                OtpCode = otp,
+                ExpiryTime = DateTime.Now.AddMinutes(5)
+            };
+
+            string subject = "Reset Your Password - OTP";
+            string body = BuildOtpEmail(otp, false);
+
+            _email.SendEmail(user.Email, subject, body);
+
+            _otpRepository.Create(emailOtp);
+        }
+
+        public void VerifyForgotPasswordOtp(int userId, string otp)
+        {
+            var record = _otpRepository.GetLatestOtp(userId);
+
+            if (record == null)
+            {
+                throw new BusinessException("OTP not found.");
+            }
+
+            if (record.IsUsed)
+            {
+                throw new BusinessException("OTP already used.");
+            }
+
+            if (record.ExpiryTime < DateTime.Now)
+            {
+                record.IsUsed = true;
+                _otpRepository.Update(record);
+
+                throw new BusinessException("OTP expired.");
+            }
+
+            if (record.OtpCode != otp)
+            {
+                record.AttemptCount++;
+                _otpRepository.Update(record);
+
+                throw new BusinessException("Invalid OTP.");
+            }
+
+            record.IsUsed = true;
+            _otpRepository.Update(record);
+        }
+
+
     }
 }
