@@ -2,51 +2,98 @@
     ViewBag.Title = "Signup";
 }
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-4">
+@{
+    ViewBag.Title = "Signup";
+}
 
-            <div class="card shadow border-0">
-                <div class="card-header text-center">
-                    <h3>Create Account</h3>
-                </div>
+<div class="auth-wrapper">
 
-                <div class="card-body">
+    <div class="card auth-card shadow-lg p-5">
 
-                    @using (Html.BeginForm("Signup", "Account", FormMethod.Post, new { id = "signupForm" }))
-                    {
-                        @*@Html.AntiForgeryToken()*@
+        <div class="text-center mb-4">
 
-                        <div class="mb-3">
-                            @Html.Label("Name", new { @class = "form-label", @for = "nameId" })
-                            @Html.TextBox("Name", null, new { @class = "form-control", placeholder = "Enter your name", id = "nameId", autocomplete = "name" })
-                        </div>
-
-                        <div class="mb-3">
-                            @Html.Label("Email", new { @class = "form-label", @for = "emailId" })
-                            @Html.TextBox("Email", null, new { @class = "form-control", placeholder = "Enter your email", id = "emailId", autocomplete = "email" })
-                        </div>
-
-                        <div class="mb-3">
-                            @Html.Label("Password", new { @class = "form-label", @for = "passwordId" })
-                            @Html.Password("Password", null, new { @class = "form-control", placeholder = "Enter password", id = "passwordId", autocomplete = "new-password" })
-                        </div>
-
-                        <div class="d-grid">
-                            <input type="submit" value="Sign Up" class="btn btn-signup" />
-                        </div>
-
-                        <div class="text-center mt-3">
-                            Already have an account?
-                            @Html.ActionLink("Login", "Login", "Account", null, new { @class = "text-decoration-none" })
-                        </div>
-                    }
-
-                </div>
+            <div class="auth-icon mb-3">
+                <i class="fa-solid fa-user-plus"></i>
             </div>
 
+            <h3 class="fw-bold mb-1">Create Account</h3>
+
+            <p class="text-muted small">
+                Sign up to start using the system
+            </p>
+
         </div>
+
+        @using (Html.BeginForm("Signup", "Account", FormMethod.Post, new { id = "signupForm" }))
+        {
+
+            <div class="mb-3">
+
+                <label class="form-label fw-semibold">Name</label>
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-user"></i>
+                    </span>
+
+                    @Html.TextBox("Name", null,
+                    new { @class = "form-control", placeholder = "Enter your name", id = "nameId" })
+
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label fw-semibold">Email</label>
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-envelope"></i>
+                    </span>
+
+                    @Html.TextBox("Email", null,
+                    new { @class = "form-control", placeholder = "Enter your email", id = "emailId" })
+
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label fw-semibold">Password</label>
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-lock"></i>
+                    </span>
+
+                    @Html.Password("Password", null,
+                    new { @class = "form-control", placeholder = "Enter password", id = "passwordId" })
+
+                </div>
+
+            </div>
+
+            <button type="submit" class="btn btn-primary auth-btn w-100">
+                Sign Up
+            </button>
+
+        }
+
+        <div class="text-center mt-4 small">
+
+            Already have an account?
+            @Html.ActionLink("Login", "Login", "Account", null,
+            new { @class = "text-decoration-none" })
+
+        </div>
+
     </div>
+
 </div>
 
 @section Scripts{

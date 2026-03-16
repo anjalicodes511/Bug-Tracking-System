@@ -2,41 +2,91 @@
     ViewBag.Title = "Login";
 }
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-4">
+@{
+    ViewBag.Title = "Login";
+}
 
-            <div class="card shadow">
-                <div class="card-header text-center">
-                    <h3>Login</h3>
-                </div>
+<div class="auth-wrapper">
 
-                <div class="card-body">
+    <div class="card auth-card shadow-lg p-5">
 
-                    @using (Html.BeginForm("Login", "Account", FormMethod.Post,new {id = "loginForm" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <div id="errorMsg" class="text-center bg-danger text-primary"></div>
-                        <div class="mb-3">
-                            @Html.Label("Email", new { @class = "form-label" })
-                            @Html.TextBox("Email", null, new { @class = "form-control", placeholder = "abc@xyz.com", id = "emailId" })
-                        </div>
+        <div class="text-center mb-4">
 
-                        <div class="mb-3">
-                            @Html.Label("Password", new { @class = "form-label" })
-                            @Html.Password("Password", null, new { @class = "form-control", id = "passwordId" })
-                        </div>
-                        <div class="mb-3 text-end">
-                            @Html.ActionLink("Forgot Password?", "ForgotPassword", "Account", null, new { @class = "text-decoration-none" })
-                        </div>
-                        <div class="d-grid">
-                            <input type="submit" value="Login" class="btn btn-login" />
-                        </div>
-                    }
-
-                </div>
+            <div class="auth-icon mb-3">
+                <i class="fa-solid fa-right-to-bracket"></i>
             </div>
 
+            <h3 class="fw-bold mb-1">Login</h3>
+
+            <p class="text-muted small">
+                Enter your credentials to continue
+            </p>
+
         </div>
+
+        @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { id = "loginForm" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div id="errorMsg" class="auth-error text-center d-none"></div>
+
+            <div class="mb-3">
+
+                <label class="form-label fw-semibold">Email</label>
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-envelope"></i>
+                    </span>
+
+                    @Html.TextBox("Email", null,
+                    new { @class = "form-control", placeholder = "abc@xyz.com", id = "emailId" })
+
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label fw-semibold">Password</label>
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-lock"></i>
+                    </span>
+
+                    @Html.Password("Password", null,
+                    new { @class = "form-control", id = "passwordId" })
+
+                </div>
+
+            </div>
+
+            <div class="mb-3 text-end small">
+                @Html.ActionLink("Forgot Password?", "ForgotPassword", "Account", null,
+                new { @class = "text-decoration-none" })
+            </div>
+
+            <button type="submit" class="btn btn-primary auth-btn w-100">
+                Login
+            </button>
+
+        }
+
+        <div class="text-center mt-4 small">
+
+            Don't have an account?
+            @Html.ActionLink("Sign Up", "Signup", "Account", null,
+            new { @class = "text-decoration-none" })
+
+        </div>
+
     </div>
+
 </div>
+
+@section Scripts{
+    <script src="~/Scripts/Account/login.js"></script>
+}

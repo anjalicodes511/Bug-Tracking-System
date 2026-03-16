@@ -12,7 +12,8 @@ $(document).ready(function () {
         }
 
         if (!user.Email || !user.Password) {
-            $("errorMessage").text("Please Enter All Fields");
+            $("#errorMessage").text("Please Enter All Fields");
+            btn.prop("disabled", false);
             return;
         }
 
@@ -23,6 +24,7 @@ $(document).ready(function () {
             data: JSON.stringify(user),
             success: function (res) {
                 if (res.success) {
+                    debugger
                     showSuccess(res.message);
                     setTimeout(function () {
                         window.location.href = res.redirectUrl;
@@ -33,9 +35,14 @@ $(document).ready(function () {
                 }
             },
             error: function (xhr) {
-                //console.error(xhr.responseText);
-                //alert("Unexpected error occurred");
-                showError("Unexpected error occurred");
+
+                var response = xhr.responseJSON;
+
+                if (response && response.message) {
+                    showError(response.message);
+                } else {
+                    showError("Unexpected error occurred");
+                }
             },
 
             complete: function () {

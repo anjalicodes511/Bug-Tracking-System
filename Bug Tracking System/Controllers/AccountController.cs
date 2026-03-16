@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using System.Web.Services.Description;
 
 namespace Bug_Tracking_System.Controllers
@@ -89,7 +90,7 @@ namespace Bug_Tracking_System.Controllers
             return Json(new { success = true, message = "Login Successful", redirectUrl = "/Account/Home" });
         }
 
-        //[Authorize]
+        [Authorize]
         public ActionResult Home()
         {
             return View();
@@ -100,10 +101,40 @@ namespace Bug_Tracking_System.Controllers
             return View();
         }
         
+        [HttpPost]
         public JsonResult ForgotPassword(string email)
         {
-            _authService.ForgotPassword(email);
-            return Json(new { success = true, message = "OTP sent to Email" });
+            var user = _authService.ForgotPassword(email);
+            Session["PendingUserId"] = user.Id;
+            return Json(new { success = true, message = "OTP sent to Email",redirectUrl = "/Account/VerifyForgotPasswordOtp" });
+        }
+
+        public ActionResult VerifyForgotPasswordOtp()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult VerifyForgotPasswordOtp(string otp)
+        {
+            if (Session["PendingUserId"] == null)
+            {
+                Response.StatusCode = 400;
+                return Json(new { success = false, message = "Session expired. Please signup again." });
+            }
+
+            int userId = (int)Session["PendingUserId"];
+
+            _authService.VerifyOtp(userId, otp);
+
+            Session.Remove("PendingUserId");
+            return Json(new { success = true, message = "Account verified successfully", redirectUrl = "/Account/Login" });
+        }
+
+        public ActionResult Logout()
+        {
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Login", "Account");
         }
     }
 }

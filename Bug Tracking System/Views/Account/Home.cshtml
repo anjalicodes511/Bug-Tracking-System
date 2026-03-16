@@ -1,7 +1,11 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Home";
 }
 
-<h2>Home</h2>
+<div class="container text-center mt-5">
+    <h2>Home</h2>
 
+    <a href="@Url.Action("Logout","Account")" class="btn btn-outline-danger mt-3">
+        Logout
+    </a>
+</div>

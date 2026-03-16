@@ -242,10 +242,10 @@ namespace Bug_Tracking_System.Services
             {
                 throw new BusinessException("Account is temporarily blocked. Try again later.");
             }
-            FormsAuthentication.SetAuthCookie(user.Email, false);
+            FormsAuthentication.SetAuthCookie(user.Id.ToString(), false);
         }
 
-        public void ForgotPassword(string email)
+        public User ForgotPassword(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
             {
@@ -263,7 +263,6 @@ namespace Bug_Tracking_System.Services
             {
                 throw new BusinessException("Account is temporarily blocked. Try again later.");
             }
-
             var oldOtp = _otpRepository.GetLatestOtp(user.Id);
 
             if (oldOtp != null)
@@ -292,6 +291,8 @@ namespace Bug_Tracking_System.Services
             _email.SendEmail(user.Email, subject, body);
 
             _otpRepository.Create(emailOtp);
+
+            return user;
         }
 
         public void VerifyForgotPasswordOtp(int userId, string otp)

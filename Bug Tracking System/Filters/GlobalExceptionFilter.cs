@@ -1,7 +1,9 @@
 ﻿using Bug_Tracking_System.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 
@@ -13,7 +15,7 @@ namespace Bug_Tracking_System.Filters
         {
             if (filterContext.ExceptionHandled)
                 return;
-
+            Debug.WriteLine("Exception: "+filterContext.Exception.Message);
             if (filterContext.Exception is BusinessException bex)
             {
                 filterContext.Result = new JsonResult

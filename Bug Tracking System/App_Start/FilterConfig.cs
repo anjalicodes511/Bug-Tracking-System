@@ -11,7 +11,6 @@ namespace Bug_Tracking_System.App_Start
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
             filters.Add(new GlobalExceptionFilter());
         }
     }
