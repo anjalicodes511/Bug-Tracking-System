@@ -266,6 +266,7 @@
     <Content Include="Content\CSS\forgetPassword.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\Account\forgotPassword.js" />
     <Content Include="Scripts\Account\login.js" />
     <Content Include="Scripts\Account\signup.js" />
     <Content Include="Scripts\Account\verifyOtp.js" />
@@ -340,6 +341,7 @@
     <Content Include="Views\Account\VerifyOtp.cshtml" />
     <Content Include="Views\Account\Home.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

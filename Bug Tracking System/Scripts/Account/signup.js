@@ -15,7 +15,8 @@ $(function () {
         };
 
         if (!user.Name || !user.Email || !user.Password) {
-            alert("All fields are required");
+            showError("All fields are required");
+            //alert("All fields are required");
             btn.prop("disabled", false);
             return;
         }
@@ -42,9 +43,14 @@ $(function () {
             },
 
             error: function (xhr) {
-                //console.error(xhr.responseText);
-                //alert("Unexpected error occurred");
-                showError("Unexpected error occurred");
+
+                var response = xhr.responseJSON;
+
+                if (response && response.message) {
+                    showError(response.message);
+                } else {
+                    showError("Unexpected error occurred");
+                }
             },
 
             complete: function () {

@@ -329,6 +329,16 @@ namespace Bug_Tracking_System.Services
             _otpRepository.Update(record);
         }
 
+        public void ResetPassword(int userId, string newPassword)
+        {
+            var user = _userRepository.GetById(userId);
 
+            if (user == null)
+                throw new BusinessException("User not found.");
+
+            user.PasswordHash = _password.Hash(newPassword);
+
+            _userRepository.Update(user);
+        }
     }
 }
