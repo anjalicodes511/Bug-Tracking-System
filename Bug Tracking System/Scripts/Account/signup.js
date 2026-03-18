@@ -1,7 +1,39 @@
 $(function () {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+
+    $("#emailId").on("input", function () {
+        const email = $(this).val();
+
+        if (email.length === 0) {
+            $(this).removeClass("is-valid is-invalid");
+            return;
+        }
+
+        if (emailRegex.test(email)) {
+            $(this).removeClass("is-invalid").addClass("is-valid");
+        } else {
+            $(this).removeClass("is-valid").addClass("is-invalid");
+        }
+    });
+
+    $("#passwordId").on("input", function () {
+        const password = $(this).val();
+
+        if (password.length === 0) {
+            $(this).removeClass("is-valid is-invalid");
+            return;
+        }
+
+        if (passwordRegex.test(password)) {
+            $(this).removeClass("is-invalid").addClass("is-valid");
+        } else {
+            $(this).removeClass("is-valid").addClass("is-invalid");
+        }
+    });
 
     $("#signupForm").on("submit", function (e) {
-
+        //alert("Hello");
         e.preventDefault();
 
         var form = $(this);
@@ -20,6 +52,18 @@ $(function () {
             btn.prop("disabled", false);
             return;
         }
+        if (!emailRegex.test(user.Email)) {
+            showError("Enter a valid email");
+            btn.prop("disabled", false);
+            return;
+        }
+
+        if (!passwordRegex.test(user.Password)) {
+            showError("Password must contain uppercase, lowercase and number (min 6 chars)");
+            btn.prop("disabled", false);
+            return;
+        }
+        
         $.ajax({
             url: "/Account/Signup",
             type: "POST",

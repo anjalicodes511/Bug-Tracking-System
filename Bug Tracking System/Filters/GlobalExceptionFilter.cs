@@ -15,7 +15,7 @@ namespace Bug_Tracking_System.Filters
         {
             if (filterContext.ExceptionHandled)
                 return;
-            Debug.WriteLine("Exception: "+filterContext.Exception.Message);
+            //Debug.WriteLine("Exception: "+filterContext.Exception.Message);
             if (filterContext.Exception is BusinessException bex)
             {
                 filterContext.Result = new JsonResult

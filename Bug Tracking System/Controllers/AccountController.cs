@@ -41,12 +41,18 @@ namespace Bug_Tracking_System.Controllers
             var user = _authService.Register(model);
             Session["PendingUserId"] = user.Id;
             Session["OtpPurpose"] = "Signup";
+            Session["OtpAllowed"] = true;
             //return Success("OTP sent successfully!!");
             return Json(new { success = true, message = "OTP Sent Successfully", redirectUrl = "/Account/VerifyOtp" });
         }
 
         public ActionResult VerifyOtp()
         {
+            if (Session["OtpAllowed"] == null || !(bool)Session["OtpAllowed"])
+            {
+                return RedirectToAction("Login", "Account");
+                //return Json(new { success = false, message = "Unauthorized access" });
+            }
             return View();
         }
 
@@ -58,23 +64,28 @@ namespace Bug_Tracking_System.Controllers
                 Response.StatusCode = 400;
                 return Json(new { success = false, message = "Session expired. Please signup again." });
             }
-
+            if (Session["OtpAllowed"] == null || !(bool)Session["OtpAllowed"])
+            {
+                return Json(new { success = false, message = "Unauthorized access" });
+            }
             int userId = (int)Session["PendingUserId"];
             string purpose = Session["OtpPurpose"].ToString();
 
-            Debug.WriteLine("OtpPurpose: " + purpose);
+            //Debug.WriteLine("OtpPurpose: " + purpose);
             if (purpose == "Signup")
             {
                 _authService.VerifyOtp(userId, otp);
                 Session.Remove("PendingUserId");
                 Session.Remove("OtpPurpose");
-
+                Session.Remove("OtpAllowed");
                 return Json(new { success = true, message = "Account verified", redirectUrl = "/Account/Login" });
             }
             else if (purpose == "ForgotPassword")
             {
                 _authService.VerifyForgotPasswordOtp(userId, otp);
                 Session.Remove("OtpPurpose");
+                Session.Remove("OtpAllowed");
+                Session["ResetAllowed"] = true;
 
                 return Json(new { success = true, message = "OTP verified", redirectUrl = "/Account/ResetPassword" });
             }
@@ -89,6 +100,10 @@ namespace Bug_Tracking_System.Controllers
             {
                 Response.StatusCode = 400;
                 return Json(new { success = false, message = "Session expired. Signup again." });
+            }
+            if (Session["OtpAllowed"] == null || !(bool)Session["OtpAllowed"])
+            {
+                return Json(new { success = false, message = "Unauthorized access" });
             }
             int userId = (int)Session["PendingUserId"];
             _authService.ResendOtp(userId);
@@ -124,12 +139,17 @@ namespace Bug_Tracking_System.Controllers
             var user = _authService.ForgotPassword(email);
             Session["PendingUserId"] = user.Id;
             Session["OtpPurpose"] = "ForgotPassword";
+            Session["OtpAllowed"] = true;
             return Json(new { success = true, message = "OTP sent to Email",redirectUrl = "/Account/VerifyOtp" });
         }
 
         [AllowAnonymous]
         public ActionResult ResetPassword()
         {
+            if(Session["ResetAllowed"]  == null || !(bool)Session["ResetAllowed"])
+            {
+                return RedirectToAction("Login", "Account");
+            }
             return View();
         }
 
@@ -141,13 +161,17 @@ namespace Bug_Tracking_System.Controllers
                 Response.StatusCode = 400;
                 return Json(new { success = false, message = "Session expired." });
             }
+            if (Session["ResetAllowed"] == null || !(bool)Session["ResetAllowed"])
+            {
+                return Json(new { success = false, message = "Unauthorized access" });
+            }
 
             int userId = (int)Session["PendingUserId"];
 
             _authService.ResetPassword(userId, newPassword);
 
             Session.Remove("PendingUserId");
-
+            Session["ResetAllowed"] = false;
             return Json(new
             {
                 success = true,
@@ -155,28 +179,7 @@ namespace Bug_Tracking_System.Controllers
                 redirectUrl = "/Account/Login"
             });
         }
-        //public ActionResult VerifyForgotPasswordOtp()
-        //{
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //public JsonResult VerifyForgotPasswordOtp(string otp)
-        //{
-        //    if (Session["PendingUserId"] == null)
-        //    {
-        //        Response.StatusCode = 400;
-        //        return Json(new { success = false, message = "Session expired. Please signup again." });
-        //    }
-
-        //    int userId = (int)Session["PendingUserId"];
-
-        //    _authService.VerifyOtp(userId, otp);
-
-        //    Session.Remove("PendingUserId");
-        //    return Json(new { success = true, message = "Account verified successfully", redirectUrl = "/Account/Login" });
-        //}
-
+        
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();

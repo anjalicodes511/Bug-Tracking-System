@@ -31,7 +31,7 @@ namespace Bug_Tracking_System.Services
         }
         public User Register(RegisterVM model)
         {
-            Debug.WriteLine("Email: " + model.Email);
+            //Debug.WriteLine("Email: " + model.Email);
             if(model == null)
             {
                 throw new ArgumentNullException(nameof(model)); 

@@ -24,7 +24,6 @@ $(document).ready(function () {
             data: JSON.stringify(user),
             success: function (res) {
                 if (res.success) {
-                    debugger
                     showSuccess(res.message);
                     setTimeout(function () {
                         window.location.href = res.redirectUrl;
