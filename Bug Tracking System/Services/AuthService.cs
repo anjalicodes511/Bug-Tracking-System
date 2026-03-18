@@ -237,7 +237,11 @@ namespace Bug_Tracking_System.Services
             {
                 throw new BusinessException("Invalid Email or Password");
             }
-
+            if (!user.IsEmailVerified)
+            {
+                throw new BusinessException("Please verify your email first");
+            }
+                
             if (user.IsBlocked && user.BlockedUntil > DateTime.Now)
             {
                 throw new BusinessException("Account is temporarily blocked. Try again later.");
