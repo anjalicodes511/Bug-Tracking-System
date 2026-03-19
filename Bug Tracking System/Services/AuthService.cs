@@ -61,17 +61,6 @@ namespace Bug_Tracking_System.Services
                 ExpiryTime = DateTime.Now.AddMinutes(5)
             };
 
-            //if (emailotp == null)
-            //{
-            //    Debug.WriteLine("EmailOtp is NULL");
-            //}
-            //else
-            //{
-            //    Debug.WriteLine("User ID"+emailotp.UserId );
-            //    Debug.WriteLine("OtpCode" + emailotp.OtpCode);
-            //    Debug.WriteLine("ExpiryTime" + emailotp.ExpiryTime);
-            //}
-
             string to = model.Email;
             string subject = "Verify Your Email";
             string body = BuildOtpEmail(otp, false);
@@ -241,7 +230,6 @@ namespace Bug_Tracking_System.Services
             {
                 throw new BusinessException("Please verify your email first");
             }
-                
             if (user.IsBlocked && user.BlockedUntil > DateTime.Now)
             {
                 throw new BusinessException("Account is temporarily blocked. Try again later.");
